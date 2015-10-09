@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package>
+  <name>nostop_gazebo_simulator</name>
+  <version>0.0.0</version>
+  <description>The nostop_gazebo_simulator package</description>
+
+  <maintainer email="nardi@mail.dm.unipi.it">simone</maintainer>
+
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>base_math</build_depend>
+  <build_depend>gazebo_ros</build_depend>
+  <build_depend>roscpp</build_depend>
+  <run_depend>base_math</run_depend>
+  <run_depend>gazebo_ros</run_depend>
+  <run_depend>roscpp</run_depend>
+
+  <export>
+  </export>
+</package>
