@@ -12,6 +12,9 @@
 
 #include <memory>
 
+#include <geometry_msgs/Pose.h>
+
+
 //~
 
 int main (int argc, char** argv)
@@ -19,9 +22,39 @@ int main (int argc, char** argv)
   ros::init(argc,argv,"gazebo_simulator");
   ros::NodeHandle n;
   
-  std::shared_ptr<GazeboDriver> l_gazebo_driver;
-  l_gazebo_driver->start();
+  GazeboDriver l_gazebo_driver;
+  
+  geometry_msgs::Pose::Ptr l_initial = boost::make_shared<geometry_msgs::Pose>();
+  
+  double theta = 0.3;
+  
+  l_initial->position.x = 0;
+  l_initial->orientation.z = sin(theta/2);
+  l_initial->orientation.w = cos(theta/2);
+  
+  l_gazebo_driver.add("test", l_initial);
+  
+  theta = 0.5;
+  l_initial->position.y = -1;
+  l_initial->orientation.z = sin(theta/2);
+  l_initial->orientation.w = cos(theta/2);
+    
+  l_gazebo_driver.add("test2", l_initial);
+  
+  theta = -0.8;
+  l_initial->position.x = 1;
+  l_initial->position.y = 1;
+  
+  l_initial->orientation.z = sin(theta/2);
+  l_initial->orientation.w = cos(theta/2);
+  
+  l_gazebo_driver.add("test3", l_initial);
+  
+  
+  l_gazebo_driver.remove("test");
   
   ros::spin();
+  
+  l_gazebo_driver.remove("test2");
  
 }

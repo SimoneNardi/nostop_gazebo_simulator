@@ -23,10 +23,6 @@ find_package(catkin REQUIRED COMPONENTS
 # Depend on system install of Gazebo
 find_package(gazebo REQUIRED)
 
-catkin_package(
-  INCLUDE_DIRS include/${PROJECT_NAME}/
-)
-
 include_directories(include/${PROJECT_NAME}/ ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS} ${SDFormat_INCLUDE_DIRS})
 
 catkin_package(
@@ -35,9 +31,18 @@ catkin_package(
       roscpp
       base_math
     CATKIN_DEPENDS
-    INCLUDE_DIRS
-    LIBRARIES
+    INCLUDE_DIRS include/${PROJECT_NAME}/
+    LIBRARIES ${PROJECT_NAME}
 )
 
-add_executable(${PROJECT_NAME} src/GazeboSimulator.cpp)
+set(Gazebo_SOURCES
+	src/GazeboDriver.cpp
+	src/GazeboSubscriber.cpp
+)
+
+## Declare a cpp library
+add_library(${PROJECT_NAME} SHARED ${Gazebo_SOURCES})
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES} base_math lemon)
+
+add_executable(${PROJECT_NAME}_node ${Gazebo_SOURCES} src/GazeboSimulator.cpp)
+target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES} base_math lemon)
