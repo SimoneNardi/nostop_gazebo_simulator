@@ -28,18 +28,18 @@ int main (int argc, char** argv)
   
   double theta = 0.3;
   
-  l_initial->position.x = 0;
+  l_initial->position.x = 25 ;
   l_initial->orientation.z = sin(theta/2);
   l_initial->orientation.w = cos(theta/2);
   
-  l_gazebo_driver.add("test", l_initial);
+  l_gazebo_driver.addGuard("test", l_initial);
   
   theta = 0.5;
   l_initial->position.y = -1;
   l_initial->orientation.z = sin(theta/2);
   l_initial->orientation.w = cos(theta/2);
     
-  l_gazebo_driver.add("test2", l_initial);
+  l_gazebo_driver.addThief("test2", l_initial);
   
   theta = -0.8;
   l_initial->position.x = 1;
@@ -48,13 +48,15 @@ int main (int argc, char** argv)
   l_initial->orientation.z = sin(theta/2);
   l_initial->orientation.w = cos(theta/2);
   
-  l_gazebo_driver.add("test3", l_initial);
+  l_gazebo_driver.addGuard("test3", l_initial);
   
   
   l_gazebo_driver.remove("test");
+  l_gazebo_driver.remove("test2");
+  l_gazebo_driver.remove("test3");
   
   ros::spin();
   
-  l_gazebo_driver.remove("test2");
+  //l_gazebo_driver.remove("test2");
  
 }

@@ -25,14 +25,16 @@ protected:
   ros::ServiceClient m_clientSpawn;
   ros::ServiceClient m_clientDelete;
   
-  gazebo_msgs::SpawnModel m_spawnModel;
+  gazebo_msgs::SpawnModel m_guardSpawnModel;
+  gazebo_msgs::SpawnModel m_thiefSpawnModel;
   
 public:
-  GazeboDriver(std::string urdf_model_filename = "/home/simone/catkin_ws/src/nostop/nostop_robot/description/urdf/model.urdf");
+  GazeboDriver(std::string urdf_model_filename = "/home/simone/catkin_ws/src/nostop/nostop_robot/description/urdf/");
   
   ~GazeboDriver();
    
-  bool add(std::string model_name, const geometry_msgs::Pose::ConstPtr &pose);
+  bool addGuard(std::string model_name, const geometry_msgs::Pose::ConstPtr &pose);
+  bool addThief(std::string model_name, const geometry_msgs::Pose::ConstPtr &pose);
   
   bool remove(std::string model_name);
 };
