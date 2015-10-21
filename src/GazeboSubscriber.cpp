@@ -12,20 +12,24 @@ GazeboSubscriber::GazeboSubscriber(std::string model_name_)
 {
   m_model_name = model_name_;
   
-  std::string l_twistTopic = "MotorControl_";
+  std::string l_twistTopic = "/publisher/twist/";
   l_twistTopic += model_name_;
   
   m_updateTwist = m_node.subscribe<geometry_msgs::Twist>(l_twistTopic.c_str(), 10, &GazeboSubscriber::updateTwist, this);
   
-  std::string l_poseTopic = "Pose_";
+  std::string l_poseTopic = "/publisher/pose/";
   l_poseTopic += model_name_;
   m_updatePose = m_node.subscribe<geometry_msgs::Pose>(l_poseTopic.c_str(), 10, &GazeboSubscriber::updatePose, this);
   
-  gazebo_msgs::ModelState l_modelstate;
-  l_modelstate.model_name = m_model_name;
-  m_setmodelstate.request.model_state = l_modelstate;
+  m_modelstate.model_name = m_model_name;
+  m_setmodelstate.request.model_state = m_modelstate;
   
   m_clientSet = m_node.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state"); 
+  
+  if (!m_clientSet.exists())
+  {
+    m_clientSet.waitForExistence(ros::Duration(5));
+  }
 }
 
 ///
@@ -34,7 +38,12 @@ void GazeboSubscriber::updateTwist(const geometry_msgs::Twist::ConstPtr &twist_)
   m_setmodelstate.request.model_state.twist.angular = twist_->angular;
   m_setmodelstate.request.model_state.twist.linear = twist_->linear;
   
-  if (m_clientSet.call(m_setmodelstate))
+  if (!m_clientSet.exists())
+  {
+    m_clientSet.waitForExistence(ros::Duration(200));
+  }
+  
+  if ( m_clientSet.exists() && m_clientSet.call(m_setmodelstate))
   {
     if (m_setmodelstate.response.success)
     {
@@ -49,7 +58,7 @@ void GazeboSubscriber::updateTwist(const geometry_msgs::Twist::ConstPtr &twist_)
   }
   else
   {
-    ROS_ERROR("Failed to call service!");
+    ROS_ERROR("Failed to call service: GazeboSubscriber::updateTwist!");
     return;
   }
 }
@@ -60,7 +69,12 @@ void GazeboSubscriber::updatePose(const geometry_msgs::Pose::ConstPtr &pose_)
   m_setmodelstate.request.model_state.pose.orientation = pose_->orientation;
   m_setmodelstate.request.model_state.pose.position = pose_->position;
   
-  if (m_clientSet.call(m_setmodelstate))
+  if (!m_clientSet.exists())
+  {
+    m_clientSet.waitForExistence(ros::Duration(200));
+  }
+  
+  if (m_clientSet.exists() && m_clientSet.call(m_setmodelstate))
   {
     if (m_setmodelstate.response.success)
     {
@@ -75,7 +89,7 @@ void GazeboSubscriber::updatePose(const geometry_msgs::Pose::ConstPtr &pose_)
   }
   else
   {
-    ROS_ERROR("Failed to call service!");
+    ROS_ERROR("Failed to call service: GazeboSubscriber::updatePose!");
     return;
   }
 }

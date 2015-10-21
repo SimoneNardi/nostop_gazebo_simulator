@@ -19,6 +19,7 @@ protected:
   ros::Subscriber m_updatePose;
     
   gazebo_msgs::SetModelState m_setmodelstate;
+  gazebo_msgs::ModelState m_modelstate;
     
   ros::NodeHandle m_node;
   
