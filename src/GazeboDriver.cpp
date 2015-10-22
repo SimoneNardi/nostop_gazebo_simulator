@@ -63,7 +63,12 @@ bool GazeboDriver::addGuard(std::string model_name_, const geometry_msgs::Pose::
 
 	m_hash.insert( make_pair( model_name_, m_model_name.size() ) );
 	m_model_name.push_back(model_name_);
-	m_updater.emplace_back( model_name_ );
+	
+	//m_updater.emplace_back( model_name_ );
+	//m_updater.push_back( GazeboSubscriber(model_name_) );
+	
+	GazeboSubscriberPtr l_gazebo_model = std::make_shared<GazeboSubscriber> (model_name_);
+	m_updater.push_back( l_gazebo_model );
 		
 	return true;
       }
@@ -94,8 +99,12 @@ bool GazeboDriver::addThief(std::string model_name_, const geometry_msgs::Pose::
 
 	m_hash.insert( make_pair( model_name_, m_model_name.size() ) );
 	m_model_name.push_back(model_name_);
-	m_updater.emplace_back( model_name_ );
-		
+	//m_updater.emplace_back( model_name_ );
+	//m_updater.push_back( GazeboSubscriber(model_name_) );
+	
+	GazeboSubscriberPtr l_gazebo_model = std::make_shared<GazeboSubscriber> (model_name_);
+	m_updater.push_back( l_gazebo_model );
+	
 	return true;
       }
       else
@@ -111,7 +120,6 @@ bool GazeboDriver::addThief(std::string model_name_, const geometry_msgs::Pose::
     }
 }
 
-  
 ///
 bool GazeboDriver::remove(std::string model_name_)
 {

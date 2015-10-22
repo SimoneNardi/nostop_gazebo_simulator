@@ -10,6 +10,8 @@
 
 #include <gazebo_msgs/SetModelState.h>
 
+#include <mutex>
+
 class GazeboSubscriber
 {
 protected:
@@ -24,6 +26,8 @@ protected:
   ros::NodeHandle m_node;
   
   ros::ServiceClient m_clientSet;
+  
+  std::mutex m_mutex;
       
 public:
   GazeboSubscriber(std::string model_name_);
@@ -32,6 +36,8 @@ public:
   
   void updatePose(const geometry_msgs::Pose::ConstPtr &pose_);
 };
+
+typedef std::shared_ptr<GazeboSubscriber> GazeboSubscriberPtr;
 
 
 #endif

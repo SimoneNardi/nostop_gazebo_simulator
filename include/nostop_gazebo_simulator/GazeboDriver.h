@@ -9,16 +9,16 @@
 
 #include <memory>
 
-#include "GazeboSubscriber.h"
-
 #include <map>
 #include <vector>
 
+#include "GazeboSubscriber.h"
+
 class GazeboDriver
 {
-protected:
+public:
   std::vector<std::string> m_model_name;
-  std::vector<GazeboSubscriber> m_updater;
+  std::vector<GazeboSubscriberPtr> m_updater;
   std::map<std::string, size_t> m_hash;
   
   ros::NodeHandle m_node;
