@@ -15,13 +15,14 @@ GazeboSubscriber::GazeboSubscriber(std::string model_name_)
 {
   m_model_name = model_name_;
   
-  std::string l_twistTopic = "/publisher/twist/";
+  std::string l_twistTopic = "/";
   l_twistTopic += model_name_;
+  l_twistTopic += "/cmd_vel";
+  //m_updateTwist = m_node.subscribe<geometry_msgs::Twist>(l_twistTopic.c_str(), 1, &GazeboSubscriber::updateTwist, this);
   
-  m_updateTwist = m_node.subscribe<geometry_msgs::Twist>(l_twistTopic.c_str(), 1, &GazeboSubscriber::updateTwist, this);
-  
-  std::string l_poseTopic = "/publisher/pose/";
+  std::string l_poseTopic = "/";
   l_poseTopic += model_name_;
+  l_poseTopic += "/pose";
   m_updatePose = m_node.subscribe<geometry_msgs::Pose>(l_poseTopic.c_str(), 10, &GazeboSubscriber::updatePose, this);
   
   m_modelstate.model_name = m_model_name;
