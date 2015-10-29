@@ -23,7 +23,7 @@ GazeboDriver::GazeboDriver(std::string urdf_model_pathname)
 {
   m_clientSpawn = m_node.serviceClient<gazebo_msgs::SpawnModel>("/gazebo/spawn_urdf_model");
   
-  std::string filename = urdf_model_pathname + "iRobot.urdf";
+  std::string filename = urdf_model_pathname + "guard.urdf";
   std::ifstream inGuardFile (filename.c_str());
   if (inGuardFile.is_open())
   {
@@ -34,7 +34,7 @@ GazeboDriver::GazeboDriver(std::string urdf_model_pathname)
     ROS_DEBUG("%s",str.c_str());
   }
   
-  filename = urdf_model_pathname + "iRobot.urdf";
+  filename = urdf_model_pathname + "thief.urdf";
   std::ifstream inThiefFile (filename.c_str());
   if (inThiefFile .is_open())
   {

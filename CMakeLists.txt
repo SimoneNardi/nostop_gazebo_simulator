@@ -44,5 +44,5 @@ set(Gazebo_SOURCES
 add_library(${PROJECT_NAME} SHARED ${Gazebo_SOURCES})
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES} base_math lemon)
 
-add_executable(${PROJECT_NAME}_node ${Gazebo_SOURCES} src/GazeboSimulator.cpp)
-target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES} base_math lemon)
+add_executable(${PROJECT_NAME}_test ${Gazebo_SOURCES} src/GazeboSimulator.cpp)
+target_link_libraries(${PROJECT_NAME}_test ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES} base_math lemon)
