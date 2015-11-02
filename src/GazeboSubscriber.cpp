@@ -72,22 +72,22 @@ void GazeboSubscriber::updatePose(const geometry_msgs::Pose::ConstPtr &pose_)
   m_setmodelstate.request.model_state.pose.orientation = pose_->orientation;
   m_setmodelstate.request.model_state.pose.position = pose_->position;
   
-//   if (m_clientSet.exists() && m_clientSet.call(m_setmodelstate))
-//   {
-//     if (m_setmodelstate.response.success)
-//     {
-//       ROS_DEBUG("%s: Pose State updated!", m_model_name.c_str());
-//       return;
-//     }
-//     else
-//     {
-//       ROS_DEBUG("%s: Pose State UNABLE to Update!", m_model_name.c_str());
-//       return;
-//     }
-//   }
-//   else
-//   {
-//     ROS_ERROR("Failed to call service: GazeboSubscriber::updatePose!");
-//     return;
-//   }
+  if (m_clientSet.exists() && m_clientSet.call(m_setmodelstate))
+  {
+    if (m_setmodelstate.response.success)
+    {
+      ROS_DEBUG("%s: Pose State updated!", m_model_name.c_str());
+      return;
+    }
+    else
+    {
+      ROS_DEBUG("%s: Pose State UNABLE to Update!", m_model_name.c_str());
+      return;
+    }
+  }
+  else
+  {
+    ROS_ERROR("Failed to call service: GazeboSubscriber::updatePose!");
+    return;
+  }
 }
