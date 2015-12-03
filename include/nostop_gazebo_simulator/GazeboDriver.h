@@ -29,7 +29,7 @@ public:
   gazebo_msgs::SpawnModel m_thiefSpawnModel;
   
 public:
-  GazeboDriver(std::string urdf_model_filename = "/home/simone/catkin_ws/src/nostop/irobotcreate2ros/iRobot/");
+  GazeboDriver(std::string urdf_model_filename = "/home/simone/catkin_ws/src/nostop/nostop_gazebo_simulator/model/");
   
   ~GazeboDriver();
    
