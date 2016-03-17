@@ -8,7 +8,7 @@
 
 #include <gazebo_msgs/DeleteModel.h>
 
-///
+///////////////////////////////////////////////////////////////////////
 GazeboDriver::~GazeboDriver()
 {
     for(size_t i = 0; i < m_model_name.size(); ++i)
@@ -17,7 +17,7 @@ GazeboDriver::~GazeboDriver()
     }
 }
 
-///
+///////////////////////////////////////////////////////////////////////
 GazeboDriver::GazeboDriver(std::string urdf_model_pathname) 
 : m_node()
 {
@@ -48,8 +48,8 @@ GazeboDriver::GazeboDriver(std::string urdf_model_pathname)
   m_clientDelete = m_node.serviceClient<gazebo_msgs::DeleteModel>("/gazebo/delete_model");
 }
 
-///
-bool GazeboDriver::addGuard(std::string model_name_, const geometry_msgs::Pose::ConstPtr &pose_ )
+///////////////////////////////////////////////////////////////////////
+bool GazeboDriver::addGuard(std::string const& model_name_, const geometry_msgs::Pose::ConstPtr &pose_ )
 {
     m_guardSpawnModel.request.model_name = model_name_.c_str();
     m_guardSpawnModel.request.initial_pose.orientation = pose_->orientation;
@@ -64,6 +64,42 @@ bool GazeboDriver::addGuard(std::string model_name_, const geometry_msgs::Pose::
 	m_hash.insert( make_pair( model_name_, m_model_name.size() ) );
 	m_model_name.push_back(model_name_);
 	
+	//m_updater.emplace_back( model_name_ );
+	//m_updater.push_back( GazeboSubscriber(model_name_) );
+	
+	GazeboSubscriberPtr l_gazebo_model = std::make_shared<GazeboSubscriber> (model_name_);
+	m_updater.push_back( l_gazebo_model );
+
+	return true;
+      }
+      else
+      {
+	ROS_INFO("Unable to add %s to simulation!", model_name_.c_str());
+	return false;
+      }
+    }
+    else
+    {
+      ROS_ERROR("Failed to call service!");
+      return false;
+    }
+}
+
+////////////////////////////////////////////////////////////////////
+bool GazeboDriver::addThief(std::string const& model_name_, const geometry_msgs::Pose::ConstPtr &pose_ )
+{
+    m_thiefSpawnModel.request.model_name = model_name_.c_str();
+    m_thiefSpawnModel.request.initial_pose.orientation = pose_->orientation;
+    m_thiefSpawnModel.request.initial_pose.position = pose_->position;
+      
+    if (m_clientSpawn.call(m_thiefSpawnModel))
+    {
+      if( m_thiefSpawnModel.response.success )
+      {
+	ROS_DEBUG("Added %s to simulation", model_name_.c_str());
+
+	m_hash.insert( make_pair( model_name_, m_model_name.size() ) );
+	m_model_name.push_back(model_name_);
 	//m_updater.emplace_back( model_name_ );
 	//m_updater.push_back( GazeboSubscriber(model_name_) );
 	
@@ -85,43 +121,8 @@ bool GazeboDriver::addGuard(std::string model_name_, const geometry_msgs::Pose::
     }
 }
 
-bool GazeboDriver::addThief(std::string model_name_, const geometry_msgs::Pose::ConstPtr &pose_ )
-{
-    m_thiefSpawnModel.request.model_name = model_name_.c_str();
-    m_thiefSpawnModel.request.initial_pose.orientation = pose_->orientation;
-    m_thiefSpawnModel.request.initial_pose.position = pose_->position;
-      
-    if (m_clientSpawn.call(m_thiefSpawnModel))
-    {
-      if( m_thiefSpawnModel.response.success )
-      {
-	ROS_DEBUG("Added %s to simulation", model_name_.c_str());
-
-	m_hash.insert( make_pair( model_name_, m_model_name.size() ) );
-	m_model_name.push_back(model_name_);
-	//m_updater.emplace_back( model_name_ );
-	//m_updater.push_back( GazeboSubscriber(model_name_) );
-	
-	GazeboSubscriberPtr l_gazebo_model = std::make_shared<GazeboSubscriber> (model_name_);
-	m_updater.push_back( l_gazebo_model );
-	
-	return true;
-      }
-      else
-      {
-	ROS_INFO("Unable to add %s to simulation!", model_name_.c_str());
-	return false;
-      }
-    }
-    else
-    {
-      ROS_ERROR("Failed to call service!");
-      return false;
-    }
-}
-
-///
-bool GazeboDriver::remove(std::string model_name_)
+///////////////////////////////////////////////////////////////////////
+bool GazeboDriver::remove(std::string const& model_name_)
 {
     gazebo_msgs::DeleteModel l_model;
     l_model.request.model_name = model_name_;

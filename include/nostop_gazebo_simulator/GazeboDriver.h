@@ -33,10 +33,10 @@ public:
   
   ~GazeboDriver();
    
-  bool addGuard(std::string model_name, const geometry_msgs::Pose::ConstPtr &pose);
-  bool addThief(std::string model_name, const geometry_msgs::Pose::ConstPtr &pose);
+  bool addGuard(std::string const& model_name, const geometry_msgs::Pose::ConstPtr &pose);
+  bool addThief(std::string const& model_name, const geometry_msgs::Pose::ConstPtr &pose);
   
-  bool remove(std::string model_name);
+  bool remove(std::string const& model_name);
 };
 
 

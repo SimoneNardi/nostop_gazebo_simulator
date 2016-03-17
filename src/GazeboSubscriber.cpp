@@ -26,7 +26,7 @@ GazeboSubscriber::GazeboSubscriber(std::string model_name_)
   m_updatePose = m_node.subscribe<geometry_msgs::Pose>(l_poseTopic.c_str(), 10, &GazeboSubscriber::updatePose, this);
   
   m_modelstate.model_name = m_model_name;
-  m_modelstate.reference_frame = "world";
+  m_modelstate.reference_frame = "map";
   m_setmodelstate.request.model_state = m_modelstate;
   
   m_clientSet = m_node.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state"); 
