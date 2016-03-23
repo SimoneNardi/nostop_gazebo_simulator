@@ -32,7 +32,7 @@ int main (int argc, char** argv)
   l_initial->orientation.z = sin(theta/2);
   l_initial->orientation.w = cos(theta/2);
   
-  l_gazebo_driver.addGuard("test", l_initial);
+  l_gazebo_driver.addGuard("test", l_initial, 2);
  
   theta = 0.5;
   l_initial->position.y = -1;
@@ -48,7 +48,7 @@ int main (int argc, char** argv)
   l_initial->orientation.z = sin(theta/2);
   l_initial->orientation.w = cos(theta/2);
   
-  l_gazebo_driver.addGuard("test3", l_initial);
+  l_gazebo_driver.addGuard("test3", l_initial, 2);
   
   
   l_gazebo_driver.remove("test");
